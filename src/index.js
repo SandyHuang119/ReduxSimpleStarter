@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import SearchBar from './components/search_bar';
@@ -13,20 +14,32 @@ class App extends Component {
       videos: [],
       selectedVideo: null
     };
+    this.videoSearch('谷阿莫');
+  }
+
+  videoSearch(term){
     // 相当于function(data){
     //   this.setState({videos:data});
     // }
-    YTSearch({key: API_KEY, term:'surfboards'}, (videos)=> {
-      this.setState({videos});
+    YTSearch({key: API_KEY, term: term}, (videos)=> {
+      this.setState({
+        videos: videos,
+        selectedVideo: videos[0]
+      });
     });
   }
 
   render(){
+    const videoSearch = _.debounce((term) => {this.videoSearch(term) },300);
+
     return (
       <div>
-        <SearchBar />
+        <SearchBar onSearchTermChange={videoSearch} />
         <VideoDetail video={this.state.selectedVideo}/>
-        <VideoList videos={this.state.videos} />
+        <VideoList
+          //onVideoSelect是一个function
+          onVideoSelect={selectedVideo => this.setState({selectedVideo})}
+          videos={this.state.videos} />
       </div>
     );
   }

@@ -2,9 +2,11 @@ import React from 'react';
 
 const VideoListItem = (props)=>{
   const video = props.video;
+  const onVideoSelect = props.onVideoSelect;
   const imageUrl = video.snippet.thumbnails.default.url;
   return (
-      <li className="list-group-item">
+    //onVideoSelects()是一个function，它会接受一个参数
+      <li onClick={()=>onVideoSelect(video)} className="list-group-item">
         <div className="video-list media">
           <div className="media-left">
             <img className="media-object" src={imageUrl} />
